@@ -35,5 +35,23 @@ export default defineNuxtConfig({
         braceStyle: '1tbs'
       }
     }
+  },
+
+  studio: {
+    route: '/admin',
+    repository: {
+      provider: 'github',
+      owner: 'awallach4',
+      repo: 'portfolio-site',
+      branch: 'master'
+    },
+    meta: {
+      components: {
+        groups: [
+          { label: 'Custom', include: ['app/components'] },
+          { label: 'Nuxt UI', include: ['../node_modules/.pnpm/**'] }
+        ]
+      }
+    }
   }
 })
