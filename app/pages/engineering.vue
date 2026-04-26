@@ -1,6 +1,6 @@
 <script setup lang="ts">
-const { data: page } = await useAsyncData('projects-page', () => {
-  return queryCollection('pages').path('/projects').first()
+const { data: page } = await useAsyncData('engineering-page', () => {
+  return queryCollection('pages').path('/engineering').first()
 })
 if (!page.value) {
   throw createError({
@@ -10,11 +10,9 @@ if (!page.value) {
   })
 }
 
-const { data: projects } = await useAsyncData('projects', () => {
-  return queryCollection('projects').all()
+const { data: projects } = await useAsyncData('engineering', () => {
+  return queryCollection('engineering').all()
 })
-
-const { global } = useAppConfig()
 
 useSeoMeta({
   title: page.value?.seo?.title || page.value?.title,
@@ -29,30 +27,12 @@ useSeoMeta({
     <UPageHero
       :title="page.title"
       :description="page.description"
-      :links="page.links"
       :ui="{
         title: 'mx-0! text-left',
         description: 'mx-0! text-left',
         links: 'justify-start'
       }"
-    >
-      <template #links>
-        <div
-          v-if="page.links"
-          class="flex items-center gap-2"
-        >
-          <UButton
-            :label="page.links[0]?.label"
-            :to="global.meetingLink"
-            v-bind="page.links[0]"
-          />
-          <UButton
-            :to="`mailto:${global.email}`"
-            v-bind="page.links[1]"
-          />
-        </div>
-      </template>
-    </UPageHero>
+    />
     <UPageSection
       :ui="{
         container: 'pt-0!'
