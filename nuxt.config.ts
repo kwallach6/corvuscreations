@@ -44,14 +44,6 @@ export default defineNuxtConfig({
       owner: 'awallach4',
       repo: 'portfolio-site',
       branch: 'master'
-    },
-    meta: {
-      components: {
-        groups: [
-          { label: 'Custom', include: ['app/components'] },
-          { label: 'Nuxt UI', include: ['../node_modules/.pnpm/**'] }
-        ]
-      }
     }
   }
 })
