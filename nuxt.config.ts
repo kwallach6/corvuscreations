@@ -17,6 +17,11 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
+  runtimeConfig: {
+    studioGithubClientId: process.env.STUDIO_GITHUB_CLIENT_ID,
+    studioGithubClientSecret: process.env.STUDIO_GITHUB_CLIENT_SECRET
+  },
+
   compatibilityDate: '2024-11-01',
 
   nitro: {
