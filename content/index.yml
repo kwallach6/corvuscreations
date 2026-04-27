@@ -6,29 +6,39 @@ description: B.S. Mechanical Engineering graduate from Rensselaer Polytechnic In
 experience:
   title: Work Experience
   items:
-    - position: Brand Designer at
-      date: 2023 - Present
+    - position: Event Technician at
+      date: 2025 - Present
       company:
-        name: Nuxt
-        logo: i-simple-icons-nuxtdotjs
-        url: https://nuxt.com
-        color: "#00DC82"
-    - position: Assets Designer at
-      date: 2022 - 2023
+        name: Showtechs
+        logo: i-lucide-lightbulb
+        url: https://showtechs.org
+        color: "#22deff"
+    - position: Intern at
+      date: 2025
       company:
-        name: Raycast
-        logo: i-simple-icons-raycast
-        url: https://raycast.com
+        name: Design Lab @ RPI
+        logo: i-lucide-cog
+        url: https://designlab.rpi.edu
         color: "#FF6363"
-    - position: Senior UX/UI Designer at
-      date: 2020 - 2021
+    - position: Student Worker at
+      date: 2022 - 2025
       company:
-        name: Linear
-        logo: i-simple-icons-linear
-        url: https://linear.app
+        name: EMPAC @ RPI
+        logo: i-lucide-palette
+        url: https://empac.rpi.edu
         color: "#5E6AD2"
+    - position: Engineering Intern at
+      company:
+        name: New Standard
+        url: https://newstandard.com
+        logo: i-lucide-cog
+        color: "#2a31faff"
+      date: 2024
+  description: ""
 hero:
   images:
+    - src: /hero/rai.jpg
+      alt: The Robotic Art Installation project
     - src: /hero/balcony.png
       alt: RPI Playhose rendering
     - src: /hero/spots.jpg
@@ -46,4 +56,4 @@ navigation:
   description: ""
 seo:
   title: Alex Wallach
-  description: Welcome to my portfolio! I'm Emma Thompson, a UX/UI designer and front-end developer based in Boston. I specialize in creating user-centered digital experiences that are both beautiful and functional.
+  description: Alex's portfolio site to showcase projects.
