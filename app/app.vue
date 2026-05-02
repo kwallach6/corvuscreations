@@ -18,8 +18,8 @@ useHead({
 })
 
 useSeoMeta({
-  titleTemplate: '%s - Nuxt Portfolio Template',
-  ogImage: 'https://ui.nuxt.com/assets/templates/nuxt/portfolio-light.png',
+  titleTemplate: '%s - Alex Wallach\'s Portfolio',
+  ogImage: '/landing.png',
   twitterCard: 'summary_large_image'
 })
 </script>

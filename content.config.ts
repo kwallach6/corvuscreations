@@ -58,11 +58,19 @@ export default defineContentConfig({
         date: z.date()
       })
     }),
+    about: defineCollection({
+      type: 'page',
+      source: 'about.yml',
+      schema: z.object({
+        content: z.object({}),
+        images: z.array(createImageSchema())
+      })
+    }),
     pages: defineCollection({
       type: 'page',
       source: {
         include: '**',
-        exclude: ['index.yml', 'arts/*.yml', 'engineering/*.yml']
+        exclude: ['index.yml', 'about.yml', 'arts/*.yml', 'engineering/*.yml']
       },
       schema: createBaseSchema()
     })

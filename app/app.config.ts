@@ -4,8 +4,7 @@ export default defineAppConfig({
       dark: '/profile.jpg',
       light: '/profile.jpg',
       alt: 'My profile picture'
-    },
-    email: 'awallch4@gmail.com'
+    }
   },
   ui: {
     colors: {
