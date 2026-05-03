@@ -39,8 +39,12 @@ hero:
   images:
     - src: /hero/rai.jpg
       alt: The Robotic Art Installation project
+    - src: /animatronic/gizmo.jpg
+      alt: Gizmo the Rockin' Robot
     - src: /hero/balcony.png
       alt: RPI Playhose rendering
+    - src: /cam/proc-train.jpg
+      alt: Engineering Processes train cab
     - src: /hero/spots.jpg
       alt: Am I Enough of Me lighting design
     - src: /hero/flying-piano.jpg
