@@ -1,5 +1,5 @@
 title: Audio Animatronic
-url: /engineering/animatronic
+date: 2026-05-15
 description: The RPI Robotics Club spent the last year designing an animatronic mascot to greet visitors to the club's meeting room! The figure will stand at about 3 feet tall and will sing a song written by the team while dancing to it! I was the senior mechanical design engineer on this project and was responsible for the torso rotating mechanism and assisting younger students with their subsystem designs.
 image: /animatronic/gizmo.jpg
-date: 2026-05-16
+url: /engineering/animatronic

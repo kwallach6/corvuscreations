@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const { data: page } = await useAsyncData('prefixed-page', () => queryCollection('pages').path(useRoute().path).first())
+const { data: page } = await useAsyncData('page', () => {
+  return queryCollection('pages').path(useRoute().path).first()
+})
 if (!page.value) {
   throw createError({
     statusCode: 404,
@@ -7,10 +9,17 @@ if (!page.value) {
     fatal: true
   })
 }
+
+useSeoMeta({
+  title: page.value?.seo.title || page.value?.title,
+  ogTitle: page.value?.seo.title || page.value?.title,
+  description: page.value?.seo.description || page.value?.description,
+  ogDescription: page.value?.seo.description || page.value?.description
+})
 </script>
 
 <template>
-  <UContainer>
+  <UContainer :ui="{ base: 'mt-12' }">
     <ContentRenderer
       v-if="page"
       :value="page"

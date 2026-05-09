@@ -7,7 +7,7 @@ experience:
   title: Work Experience
   items:
     - position: Event Technician at
-      date: 2025 - Present
+      date: 2025 - 2026
       company:
         name: Showtechs
         logo: i-lucide-lightbulb
@@ -39,20 +39,26 @@ hero:
   images:
     - src: /hero/rai.jpg
       alt: The Robotic Art Installation project
-    - src: /animatronic/gizmo.jpg
-      alt: Gizmo the Rockin' Robot
     - src: /hero/balcony.png
       alt: RPI Playhose rendering
-    - src: /cam/proc-train.jpg
-      alt: Engineering Processes train cab
+    - src: /mps/mps-team.jpg
+      alt: MPS project team photo.
     - src: /hero/spots.jpg
       alt: Am I Enough of Me lighting design
+    - src: /animatronic/gizmo.jpg
+      alt: Gizmo the Rockin' Robot
     - src: /hero/flying-piano.jpg
       alt: Paper Pianos at EMPAC
+    - src: /cam/proc-train.jpg
+      alt: Engineering Processes train cab
     - src: /hero/west-booms.jpg
       alt: West Hall lighting improvements
+    - src: /mps/handheld-hockey-line-sim.png
+      alt: An Octopuz simulation of the MILL at RPI.
     - src: /hero/spots2.jpg
       alt: Am I Enough of Me finale
+    - src: /mps/rpiggy-bank.jpg
+      alt: An RPIggy Bank from the MPS course.
     - src: /hero/volcano.jpg
       alt: Shifting Center volcano at EMPAC
 navigation:
