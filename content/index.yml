@@ -13,6 +13,13 @@ experience:
         logo: i-lucide-lightbulb
         url: https://showtechs.org
         color: "#22deff"
+    - position: Tutor at
+      company:
+        name: RPI Success Center
+        url: https://successcenter.rpi.edu
+        logo: i-lucide-graduation-cap
+        color: "#d6001c"
+      date: 2025 - 2026
     - position: Intern at
       date: 2025
       company:
