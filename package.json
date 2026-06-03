@@ -26,6 +26,7 @@
     "tailwindcss": "^4.2.2"
   },
   "devDependencies": {
+    "@netlify/plugin-csp-nonce": "^1.6.2",
     "@nuxt/eslint": "^1.15.2",
     "eslint": "^10.2.0",
     "typescript": "^6.0.2",
