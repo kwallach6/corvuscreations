@@ -3,7 +3,7 @@
   [headers.values]
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
-    Content-Security-Policy = "default-src 'none'; script-src 'self'; connect-src 'self'; img-src 'self'; style-src 'self'; base-uri 'self'; media-src 'self'; child-src 'self' youtube.com; frame-ancestors 'none'; upgrade-insecure-requests"
+    Content-Security-Policy = "default-src 'none'; script-src 'self'; connect-src 'self'; img-src 'self'; style-src 'self'; base-uri 'self'; media-src 'self'; font-src 'self'; child-src 'self' youtube.com; frame-ancestors 'none'; upgrade-insecure-requests"
 [[plugins]]
   package = "@netlify/plugin-csp-nonce"
   [plugins.inputs]

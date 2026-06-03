@@ -14,6 +14,7 @@
   "dependencies": {
     "@iconify-json/lucide": "^1.2.102",
     "@iconify-json/simple-icons": "^1.2.78",
+    "@netlify/plugin-csp-nonce": "^1.6.2",
     "@nuxt/content": "^3.12.0",
     "@nuxt/image": "^2.0.0",
     "@nuxt/ui": "^4.6.1",
@@ -26,7 +27,6 @@
     "tailwindcss": "^4.2.2"
   },
   "devDependencies": {
-    "@netlify/plugin-csp-nonce": "^1.6.2",
     "@nuxt/eslint": "^1.15.2",
     "eslint": "^10.2.0",
     "typescript": "^6.0.2",
