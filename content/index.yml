@@ -44,9 +44,9 @@ experience:
   description: ""
 hero:
   images:
-    - src: /hero/rai.jpg
+    - src: /rai/rai.jpg
       alt: The Robotic Art Installation project
-    - src: /hero/balcony.png
+    - src: /playhouse/Balcony.png
       alt: RPI Playhose rendering
     - src: /mps/mps-team.jpg
       alt: MPS project team photo.
@@ -54,7 +54,7 @@ hero:
       alt: Am I Enough of Me lighting design
     - src: /animatronic/gizmo.jpg
       alt: Gizmo the Rockin' Robot
-    - src: /hero/flying-piano.jpg
+    - src: /empac/flying-piano.jpg
       alt: Paper Pianos at EMPAC
     - src: /cam/trains.jpg
       alt: Aluminum train cabs
@@ -66,7 +66,7 @@ hero:
       alt: Am I Enough of Me finale
     - src: /mps/rpiggy-bank.jpg
       alt: An RPIggy Bank from the MPS course.
-    - src: /hero/volcano.jpg
+    - src: /empac/volcano.jpg
       alt: Shifting Center volcano at EMPAC
 navigation:
   title: ""
