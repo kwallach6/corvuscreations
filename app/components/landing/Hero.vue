@@ -137,6 +137,7 @@ defineProps<{
         <NuxtImg
           width="234"
           height="234"
+          quality="100"
           class="rounded-lg aspect-square object-cover"
           :class="index % 2 === 0 ? '-rotate-2' : 'rotate-2'"
           v-bind="img"
