@@ -16,6 +16,9 @@ export default defineNuxtConfig({
   devtools: {
     enabled: true
   },
+  app: {
+    pageTransition: { name: 'page', mode: 'out-in' }
+  },
 
   css: ['~/assets/css/main.css'],
 
@@ -63,7 +66,7 @@ export default defineNuxtConfig({
         'form-action': ['\'self\''],
         'frame-src': ['\'self\'', 'https: www.youtube.com'],
         'frame-ancestors': ['\'self\''],
-        'img-src': ['\'self\'', 'data:'],
+        'img-src': ['\'self\'', 'data:', 'https: avatars.githubusercontent.com'],
         'object-src': ['\'none\''],
         'style-src': ['\'self\'', 'https:', '\'unsafe-inline\''],
         'script-src': ['\'unsafe-eval\'', '\'strict-dynamic\'', '\'nonce-{{nonce}}\''],

@@ -3,7 +3,7 @@ description: College is packed with lectures, but it's the projects that really 
 seo:
   title: Engineering Projects
   description: A collection of my engineering projects
-links:
-  - label: Let's talk
-    color: neutral
-  - label: Email me
+sitemap:
+  loc: /engineering
+  videos: []
+  images: []

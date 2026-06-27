@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const { data: page } = await useAsyncData('engineering-page', () => {
-  return queryCollection('pages').path('/engineering').first()
+  return queryCollection('projlist').path('/engineering').first()
 })
 if (!page.value) {
   throw createError({
@@ -10,8 +10,8 @@ if (!page.value) {
   })
 }
 
-const { data: projects } = await useAsyncData('engineering', () => {
-  return queryCollection('engineering').all()
+const { data: projects } = await useAsyncData('eng-projects', () => {
+  return queryCollection('engmeta').all()
 })
 
 useSeoMeta({

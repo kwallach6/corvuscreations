@@ -36,7 +36,28 @@ export default defineContentConfig({
         sitemap: defineSitemapSchema()
       })
     }),
-    engineering: defineCollection({
+    projlist: defineCollection({
+      type: 'page',
+      source: [
+        { include: 'engineering.yml' },
+        { include: 'arts.yml' }
+      ],
+      schema: z.object({
+        title: z.string(),
+        description: z.string(),
+        sitemap: defineSitemapSchema()
+      })
+    }),
+    about: defineCollection({
+      type: 'page',
+      source: 'about.md',
+      schema: z.object({
+        title: z.string(),
+        description: z.string(),
+        sitemap: defineSitemapSchema()
+      })
+    }),
+    engmeta: defineCollection({
       type: 'data',
       source: 'engineering/*.yml',
       schema: z.object({
@@ -48,7 +69,7 @@ export default defineContentConfig({
         date: z.date()
       })
     }),
-    arts: defineCollection({
+    artmeta: defineCollection({
       type: 'data',
       source: 'arts/*.yml',
       schema: z.object({
@@ -60,12 +81,18 @@ export default defineContentConfig({
         date: z.date()
       })
     }),
-    pages: defineCollection({
+    engpage: defineCollection({
       type: 'page',
-      source: {
-        include: '**',
-        exclude: ['index.yml', 'arts/*.yml', 'engineering/*.yml']
-      },
+      source: 'engineering/*.md',
+      schema: z.object({
+        title: z.string(),
+        description: z.string(),
+        sitemap: defineSitemapSchema()
+      })
+    }),
+    artpage: defineCollection({
+      type: 'page',
+      source: 'arts/*.md',
       schema: z.object({
         title: z.string(),
         description: z.string(),
