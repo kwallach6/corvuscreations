@@ -1,4 +1,5 @@
 import { defineCollection, defineContentConfig, z } from '@nuxt/content'
+import { defineSitemapSchema } from '@nuxtjs/sitemap/content'
 
 const createBaseSchema = () => z.object({
   title: z.string(),
@@ -31,7 +32,8 @@ export default defineContentConfig({
               color: z.string()
             })
           }))
-        })
+        }),
+        sitemap: defineSitemapSchema()
       })
     }),
     engineering: defineCollection({
@@ -58,21 +60,17 @@ export default defineContentConfig({
         date: z.date()
       })
     }),
-    about: defineCollection({
-      type: 'page',
-      source: 'about.yml',
-      schema: z.object({
-        content: z.object({}),
-        images: z.array(createImageSchema())
-      })
-    }),
     pages: defineCollection({
       type: 'page',
       source: {
         include: '**',
-        exclude: ['index.yml', 'about.yml', 'arts/*.yml', 'engineering/*.yml']
+        exclude: ['index.yml', 'arts/*.yml', 'engineering/*.yml']
       },
-      schema: createBaseSchema()
+      schema: z.object({
+        title: z.string(),
+        description: z.string(),
+        sitemap: defineSitemapSchema()
+      })
     })
   }
 })
