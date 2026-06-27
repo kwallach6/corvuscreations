@@ -1,9 +1,6 @@
 ---
 title: About Me
 description: Learn about everything I've done in college and the awards I received!
-seo:
-  title: About Me
-  description: Learn about everything I've done in college and the awards I received!
 sitemap:
   loc: /about
   lastmod: 2026-06-27
