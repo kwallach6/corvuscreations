@@ -1,4 +1,5 @@
 import { defineCollection, defineContentConfig, z } from '@nuxt/content'
+import { defineSitemapSchema } from '@nuxtjs/sitemap/content'
 
 const createBaseSchema = () => z.object({
   title: z.string(),
@@ -31,7 +32,8 @@ export default defineContentConfig({
               color: z.string()
             })
           }))
-        })
+        }),
+        sitemap: defineSitemapSchema()
       })
     }),
     engineering: defineCollection({
@@ -64,7 +66,11 @@ export default defineContentConfig({
         include: '**',
         exclude: ['index.yml', 'arts/*.yml', 'engineering/*.yml']
       },
-      schema: createBaseSchema()
+      schema: z.object({
+        title: z.string(),
+        description: z.string(),
+        sitemap: defineSitemapSchema()
+      })
     })
   }
 })

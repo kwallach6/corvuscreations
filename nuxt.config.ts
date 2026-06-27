@@ -3,14 +3,14 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
     '@nuxt/image',
+    '@nuxtjs/sitemap',
     '@nuxt/ui',
     '@nuxt/content',
     '@vueuse/nuxt',
-    'nuxt-og-image',
     'motion-v/nuxt',
     'nuxt-studio',
     'nuxt-security',
-    '@nuxtjs/sitemap'
+    '@nuxtjs/robots'
   ],
 
   devtools: {
@@ -18,6 +18,13 @@ export default defineNuxtConfig({
   },
 
   css: ['~/assets/css/main.css'],
+
+  site: {
+    url: 'https://awallach-portfolio.netlify.app',
+    name: 'Alex Wallach \'s Portfolio',
+    description: 'A website to showcase Alex\'s projects.',
+    defaultLocale: 'en'
+  },
 
   runtimeConfig: {
     studioGithubClientId: process.env.STUDIO_GITHUB_CLIENT_ID,
@@ -54,7 +61,7 @@ export default defineNuxtConfig({
         'base-uri': ['\'none\''],
         'font-src': ['\'self\'', 'https:', 'data:'],
         'form-action': ['\'self\''],
-        'frame-src': ['https: www.youtube.com'],
+        'frame-src': ['\'self\'', 'https: www.youtube.com'],
         'frame-ancestors': ['\'self\''],
         'img-src': ['\'self\'', 'data:'],
         'object-src': ['\'none\''],
