@@ -1,7 +1,11 @@
 ---
-title: About
+title: About Me
+description: Learn about everything I've done in college and the awards I received!
 sitemap:
   loc: /about
+  lastmod: 2026-06-27
+  videos: []
+  images: []
 ---
 
 :about-header{description="Where do engineering and the arts intersect? Read about my college journey and all of the projects and teams I've been a part of." title="About Me"}
