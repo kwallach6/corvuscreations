@@ -21,7 +21,7 @@ export default defineNuxtConfig({
 
   site: {
     url: 'https://awallach-portfolio.netlify.app',
-    name: 'Alex Wallach \'s Portfolio',
+    name: 'Alex Wallach\'s Portfolio',
     description: 'A website to showcase Alex\'s projects.',
     defaultLocale: 'en'
   },
