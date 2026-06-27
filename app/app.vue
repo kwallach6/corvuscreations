@@ -19,7 +19,6 @@ useHead({
 
 useSeoMeta({
   titleTemplate: '%s - Alex Wallach\'s Portfolio',
-  ogImage: '/landing.png',
   twitterCard: 'summary_large_image'
 })
 </script>

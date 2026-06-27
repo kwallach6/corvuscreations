@@ -10,7 +10,8 @@ export default defineNuxtConfig({
     'motion-v/nuxt',
     'nuxt-studio',
     'nuxt-security',
-    '@nuxtjs/robots'
+    '@nuxtjs/robots',
+    'nuxt-og-image'
   ],
 
   devtools: {
@@ -52,6 +53,10 @@ export default defineNuxtConfig({
         braceStyle: '1tbs'
       }
     }
+  },
+
+  ogImage: {
+    zeroRuntime: true
   },
 
   security: {

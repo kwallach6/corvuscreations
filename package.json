@@ -19,13 +19,17 @@
     "@nuxt/ui": "^4.9.0",
     "@nuxtjs/robots": "^6.1.2",
     "@nuxtjs/sitemap": "^8.2.2",
+    "@takumi-rs/core": "^2.0.0-beta.14",
+    "@unhead/vue": "^3.1.6",
     "@vueuse/nuxt": "^14.3.0",
     "better-sqlite3": "^12.11.1",
     "motion-v": "^2.3.0",
     "nuxt": "^4.4.8",
+    "nuxt-og-image": "^6.7.0",
     "nuxt-security": "^2.6.0",
     "nuxt-studio": "1.7.0",
-    "tailwindcss": "^4.3.1"
+    "tailwindcss": "^4.3.1",
+    "unstorage": "^1.17.5"
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.16.0",

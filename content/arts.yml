@@ -3,3 +3,7 @@ description: Creativity is critical to good engineering, and everyone needs an o
 seo:
   title: Art Projects
   description: A collection of my work in the arts.
+sitemap:
+  loc: /arts
+  videos: []
+  images: []
