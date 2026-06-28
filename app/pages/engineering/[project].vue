@@ -10,16 +10,19 @@ if (!page.value) {
   })
 }
 
+const title = page.value?.seo.title || page.value?.title
+const description = page.value?.seo.description || page.value?.description
+
 useSeoMeta({
-  title: page.value?.seo.title || page.value?.title,
-  ogTitle: page.value?.seo.title || page.value?.title,
-  description: page.value?.seo.description || page.value?.description,
-  ogDescription: page.value?.seo.description || page.value?.description
+  title: title,
+  ogTitle: title,
+  description: description,
+  ogDescription: description
 })
 
 defineOgImage('Portfolio', {
-  title: `${page.value?.seo.title || page.value?.title} - Alex Wallach's Portfolio`,
-  description: page.value?.seo.description || page.value?.description
+  title: `${title} - Alex Wallach's Portfolio`,
+  description
 })
 </script>
 

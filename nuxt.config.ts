@@ -24,7 +24,7 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
 
   site: {
-    url: 'https://awallach-portfolio.netlify.app',
+    url: process.env.NUXT_PUBLIC_SITE_URL,
     name: 'Alex Wallach\'s Portfolio',
     description: 'A website to showcase Alex\'s projects.',
     defaultLocale: 'en'
@@ -39,9 +39,7 @@ export default defineNuxtConfig({
 
   nitro: {
     prerender: {
-      routes: [
-        '/'
-      ],
+      routes: [],
       crawlLinks: false
     }
   },
