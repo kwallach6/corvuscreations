@@ -3,15 +3,13 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
     '@nuxt/image',
-    '@nuxtjs/sitemap',
+    '@nuxtjs/seo',
     '@nuxt/ui',
     '@nuxt/content',
     '@vueuse/nuxt',
     'motion-v/nuxt',
     'nuxt-studio',
-    'nuxt-security',
-    '@nuxtjs/robots',
-    'nuxt-og-image'
+    'nuxt-security'
   ],
 
   devtools: {
@@ -24,10 +22,11 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
 
   site: {
-    url: process.env.NUXT_PUBLIC_SITE_URL,
+    url: 'https://awallach-portfolio.netlify.app',
     name: 'Alex Wallach\'s Portfolio',
     description: 'A website to showcase Alex\'s projects.',
-    defaultLocale: 'en'
+    defaultLocale: 'en',
+    trailingSlash: false
   },
 
   runtimeConfig: {
@@ -54,8 +53,27 @@ export default defineNuxtConfig({
   },
 
   ogImage: {
-    zeroRuntime: true
+    zeroRuntime: false,
+    security: {
+      secret: process.env.NUXT_OG_IMAGE_SECRET
+    }
   },
+
+  robots: {
+    groups: [
+      {
+        userAgent: '*',
+        allow: '/',
+        contentUsage: {
+          'train-ai': 'n',
+          'ai-output': 'n',
+          'bots': 'y',
+          'search': 'y'
+        }
+      }
+    ]
+  },
+  schemaOrg: false,
 
   security: {
     strict: false,
