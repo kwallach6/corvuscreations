@@ -63,13 +63,7 @@ export default defineNuxtConfig({
     groups: [
       {
         userAgent: '*',
-        allow: '/',
-        contentUsage: {
-          'train-ai': 'n',
-          'ai-output': 'n',
-          'bots': 'y',
-          'search': 'y'
-        }
+        allow: '/'
       }
     ]
   },
