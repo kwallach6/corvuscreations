@@ -50,8 +50,7 @@ export default defineNuxtConfig({
     prerender: {
       routes: [],
       crawlLinks: false
-    },
-    compressPublicAssets: true
+    }
   },
 
   eslint: {
