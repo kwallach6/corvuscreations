@@ -13,7 +13,11 @@ export default defineNuxtConfig({
   ],
 
   devtools: {
-    enabled: true
+    enabled: true,
+
+    timeline: {
+      enabled: true
+    }
   },
   app: {
     pageTransition: { name: 'page', mode: 'out-in' }
@@ -29,6 +33,12 @@ export default defineNuxtConfig({
     trailingSlash: false
   },
 
+  content: {
+    experimental: {
+      sqliteConnector: 'native'
+    }
+  },
+
   runtimeConfig: {
     studioGithubClientId: process.env.STUDIO_GITHUB_CLIENT_ID,
     studioGithubClientSecret: process.env.STUDIO_GITHUB_CLIENT_SECRET
@@ -40,7 +50,8 @@ export default defineNuxtConfig({
     prerender: {
       routes: [],
       crawlLinks: false
-    }
+    },
+    compressPublicAssets: true
   },
 
   eslint: {
@@ -49,6 +60,17 @@ export default defineNuxtConfig({
         commaDangle: 'never',
         braceStyle: '1tbs'
       }
+    }
+  },
+
+  image: {
+    format: ['avif', 'webp', 'jpg'],
+    screens: {
+      'sm': 640,
+      'md': 768,
+      'lg': 1024,
+      'xl': 1280,
+      '2xl': 1536
     }
   },
 
