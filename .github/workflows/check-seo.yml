@@ -242,14 +242,20 @@ jobs:
             "$SITE_URL" \
             > homepage.html
 
-          IMAGE_URL=$(grep -oE 'https?://[^"]+|/[^"]+' homepage.html \
+          IMAGE_URL=$(grep -oE 'srcset="[^"]+|src="[^"]+' homepage.html \
             | grep "$AVATAR_MARKER" \
-            | head -n 1)
+            | head -n 1 \
+            | sed -E 's/^(srcset|src)="//' \
+            | cut -d',' -f1 \
+            | awk '{print $1}')
 
           if [ -z "$IMAGE_URL" ]; then
             echo "Could not find avatar image URL"
             exit 1
           fi
+
+          # Decode HTML entities
+          IMAGE_URL=$(echo "$IMAGE_URL" | sed 's/&amp;/\&/g')
 
           if [[ "$IMAGE_URL" == /* ]]; then
             IMAGE_URL="${SITE_URL}${IMAGE_URL}"
