@@ -1,4 +1,4 @@
-name: Check deployed OG image
+name: Test deployed site
 
 on:
   pull_request:
@@ -10,6 +10,131 @@ permissions:
   contents: read
 
 jobs:
+  check-seo:
+    name: Verify deployed site
+    runs-on: ubuntu-latest
+
+    env:
+      PRODUCTION_URL: https://awallach-portfolio.netlify.app
+
+    steps:
+      - name: Check for Netlify skip
+        id: skip
+        run: |
+          COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
+
+          if echo "$COMMIT_MESSAGE" | grep -qi "\[skip netlify\]"; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "Netlify deploy skipped"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Find Netlify deploy
+        if: steps.skip.outputs.skip != 'true'
+        id: deploy
+        env:
+          NETLIFY_TOKEN: ${{ secrets.NETLIFY_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          COMMIT_SHA: ${{ github.sha }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            CONTEXT="deploy-preview"
+          else
+            CONTEXT="production"
+          fi
+
+          for attempt in $(seq 1 60); do
+            echo "Waiting for Netlify deploy ($attempt/60)"
+
+            DEPLOY=$(curl --silent \
+              --fail \
+              -H "Authorization: Bearer $NETLIFY_TOKEN" \
+              "https://api.netlify.com/api/v1/sites/$NETLIFY_SITE_ID/deploys?per_page=100" \
+              | jq -r "
+                .[]
+                | select(.commit_ref==\"$COMMIT_SHA\")
+                | select(.context==\"$CONTEXT\")
+                | select(.state==\"ready\")
+                | .deploy_ssl_url
+              " \
+              | head -n 1)
+
+            if [ -n "$DEPLOY" ]; then
+              echo "url=$DEPLOY" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+
+            sleep 10
+          done
+
+          echo "Timed out waiting for Netlify deploy"
+          exit 1
+
+      - name: Set production URL
+        if: github.event_name == 'push' && steps.skip.outputs.skip != 'true'
+        id: production
+        run: |
+          echo "url=${{ env.PRODUCTION_URL }}" >> "$GITHUB_OUTPUT"
+
+      - name: Resolve site URL
+        id: site
+        if: steps.skip.outputs.skip != 'true'
+        run: |
+          if [ "${{ steps.deploy.outputs.url }}" != "" ]; then
+            echo "url=${{ steps.deploy.outputs.url }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "url=${{ steps.production.outputs.url }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check robots.txt
+        if: steps.skip.outputs.skip != 'true'
+        env:
+          SITE_URL: ${{ steps.site.outputs.url }}
+        run: |
+          echo "Checking robots.txt"
+
+          curl \
+            --fail \
+            --silent \
+            "$SITE_URL/robots.txt" \
+            | tee robots.txt
+
+          echo ""
+          echo "robots.txt contents:"
+          cat robots.txt
+
+      - name: Check sitemap.xml
+        if: steps.skip.outputs.skip != 'true'
+        env:
+          SITE_URL: ${{ steps.site.outputs.url }}
+        run: |
+          echo "Checking sitemap.xml"
+
+          curl \
+            --fail \
+            --silent \
+            "$SITE_URL/sitemap.xml" \
+            | tee sitemap.xml
+
+          echo ""
+          echo "sitemap.xml contents:"
+          cat sitemap.xml
+
+      - name: Check homepage
+        if: steps.skip.outputs.skip != 'true'
+        env:
+          SITE_URL: ${{ steps.site.outputs.url }}
+        run: |
+          curl \
+            --fail \
+            --silent \
+            --show-error \
+            "$SITE_URL" \
+            > homepage.html
+
+          echo "Homepage loaded successfully"
   og-image:
     name: Verify OG image rendering
     runs-on: ubuntu-latest
