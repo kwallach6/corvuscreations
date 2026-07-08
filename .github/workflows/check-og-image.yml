@@ -18,7 +18,25 @@ jobs:
       PRODUCTION_URL: https://awallach-portfolio.netlify.app
 
     steps:
+      - name: Check for Netlify skip
+        id: skip
+        run: |
+          COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
+
+          if echo "$COMMIT_MESSAGE" | grep -qi "\[skip netlify\]"; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "Netlify deploy skipped by commit message"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Report skipped OG check
+        if: steps.skip.outputs.skip == 'true'
+        run: |
+          echo "Skipping OG image check because commit contains [skip netlify]"
+
       - name: Find Netlify deploy
+        if: steps.skip.outputs.skip != 'true'
         id: deploy
         env:
           NETLIFY_TOKEN: ${{ secrets.NETLIFY_TOKEN }}
@@ -64,6 +82,7 @@ jobs:
           exit 1
 
       - name: Check OG image
+        if: steps.skip.outputs.skip != 'true'
         env:
           SITE_URL: ${{ steps.deploy.outputs.url }}
         run: |
