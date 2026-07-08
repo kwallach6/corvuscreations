@@ -31,6 +31,11 @@ jobs:
             echo "skip=false" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Capture workflow start time
+        id: start
+        run: |
+          echo "timestamp=$(date -u +%s)" >> "$GITHUB_OUTPUT"
+
       - name: Find Netlify deploy
         id: deploy
         if: steps.skip.outputs.skip != 'true'
@@ -62,13 +67,15 @@ jobs:
               "https://api.netlify.com/api/v1/sites/$NETLIFY_SITE_ID/deploys?per_page=100")
 
             if [ "$EVENT_NAME" = "pull_request" ]; then
+              START_TIME="${{ steps.start.outputs.timestamp }}"
+
               DEPLOY=$(echo "$DEPLOYS" \
                 | jq -r "
                   .[]
                   | select(.state==\"ready\")
                   | select(.context==\"deploy-preview\")
-                  | select(.commit_ref==\"$COMMIT_SHA\")
                   | select(.deploy_ssl_url | contains(\"deploy-preview-$PR_NUMBER--\"))
+                  | select((.created_at | fromdateiso8601) >= $START_TIME)
                   | .deploy_ssl_url
                 " \
                 | head -n 1)
