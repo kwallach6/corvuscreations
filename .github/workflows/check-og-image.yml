@@ -1,0 +1,139 @@
+name: Check deployed OG image
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
+  issues: read
+  pull-requests: read
+
+jobs:
+  og-image:
+    name: Verify OG image rendering
+    runs-on: ubuntu-latest
+
+    env:
+      # Change this to your production domain.
+      PRODUCTION_URL: https://awallach-portfolio.netlify.app
+
+    steps:
+      - name: Find deploy URL
+        id: deploy
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+            const maxAttempts = 30;
+            let url;
+
+            if (context.eventName === "pull_request") {
+              const { owner, repo } = context.repo;
+
+              for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+                console.log(
+                  `Looking for Netlify Deploy Preview URL (${attempt}/${maxAttempts})`
+                );
+
+                const comments = await github.rest.issues.listComments({
+                  owner,
+                  repo,
+                  issue_number: context.issue.number,
+                  per_page: 100,
+                });
+
+                // Search newest comments first.
+                for (const comment of comments.data.reverse()) {
+                  const match = comment.body.match(
+                    /https:\/\/deploy-preview-\d+--[a-z0-9-]+\.netlify\.app/
+                  );
+
+                  if (match) {
+                    url = match[0];
+                    break;
+                  }
+                }
+
+                if (url) {
+                  break;
+                }
+
+                await delay(10000);
+              }
+
+              if (!url) {
+                core.setFailed(
+                  "Timed out waiting for Netlify Deploy Preview URL"
+                );
+                return;
+              }
+            } else {
+              url = process.env.PRODUCTION_URL;
+            }
+
+            console.log(`Testing deploy: ${url}`);
+            core.setOutput("url", url);
+
+      - name: Check OG image
+        env:
+          SITE_URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          MAX_ATTEMPTS=30
+
+          for attempt in $(seq 1 $MAX_ATTEMPTS); do
+            echo "Checking OG image (${attempt}/${MAX_ATTEMPTS})"
+
+            HTML=$(curl \
+              --fail \
+              --silent \
+              --show-error \
+              "$SITE_URL" || true)
+
+            if [ -n "$HTML" ]; then
+              OG_IMAGE=$(echo "$HTML" \
+                | grep -oP '<meta property="og:image" content="\K[^"]+' \
+                | head -n 1)
+
+              if [ -n "$OG_IMAGE" ]; then
+                echo "Found OG image:"
+                echo "$OG_IMAGE"
+
+                if [[ "$OG_IMAGE" == /* ]]; then
+                  OG_IMAGE="$SITE_URL$OG_IMAGE"
+                fi
+
+                # Prevent stale cached OG responses.
+                OG_IMAGE="${OG_IMAGE}?ci_check=$(date +%s)"
+
+                echo "Fetching OG image:"
+                echo "$OG_IMAGE"
+
+                if curl \
+                  --fail \
+                  --silent \
+                  --show-error \
+                  --output og-image.png \
+                  "$OG_IMAGE"; then
+
+                  FILE_TYPE=$(file og-image.png)
+
+                  echo "$FILE_TYPE"
+
+                  if echo "$FILE_TYPE" | grep -q "PNG image"; then
+                    echo "✅ OG image rendered successfully"
+                    exit 0
+                  fi
+                fi
+              fi
+            fi
+
+            echo "OG image not ready yet; retrying in 10 seconds..."
+            sleep 10
+          done
+
+          echo "❌ Timed out waiting for OG image"
+          exit 1
