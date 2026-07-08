@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: read
 
 jobs:
   check-seo:
@@ -40,32 +41,53 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
         run: |
           if [ "$EVENT_NAME" = "pull_request" ]; then
-            CONTEXT="deploy-preview"
+            echo "Looking for Deploy Preview #$PR_NUMBER"
+
+            MATCH="deploy-preview-$PR_NUMBER--"
+
           else
-            CONTEXT="production"
-          fi
+            echo "Looking for production deploy for $COMMIT_SHA"
+
+            MATCH=""
+          fi          
 
           for attempt in $(seq 1 60); do
-            echo "Waiting for Netlify deploy ($attempt/60)"
+            echo "Checking Netlify deploys ($attempt/60)"
 
-            DEPLOY=$(curl --silent \
+            DEPLOYS=$(curl \
+              --silent \
               --fail \
               -H "Authorization: Bearer $NETLIFY_TOKEN" \
-              "https://api.netlify.com/api/v1/sites/$NETLIFY_SITE_ID/deploys?per_page=100" \
-              | jq -r "
-                .[]
-                | select(.commit_ref==\"$COMMIT_SHA\")
-                | select(.context==\"$CONTEXT\")
-                | select(.state==\"ready\")
-                | .deploy_ssl_url
-              " \
-              | head -n 1)
+              "https://api.netlify.com/api/v1/sites/$NETLIFY_SITE_ID/deploys?per_page=100")
+
+            if [ "$EVENT_NAME" = "pull_request" ]; then
+              DEPLOY=$(echo "$DEPLOYS" \
+                | jq -r "
+                  .[]
+                  | select(.state==\"ready\")
+                  | select(.deploy_ssl_url | contains(\"$MATCH\"))
+                  | .deploy_ssl_url
+                " \
+                | head -n 1)
+            else
+              DEPLOY=$(echo "$DEPLOYS" \
+                | jq -r "
+                  .[]
+                  | select(.state==\"ready\")
+                  | select(.context==\"production\")
+                  | select(.commit_ref==\"$COMMIT_SHA\")
+                  | .deploy_ssl_url
+                " \
+                | head -n 1)
+            fi
 
             if [ -n "$DEPLOY" ]; then
+              echo "Found deploy: $DEPLOY"
               echo "url=$DEPLOY" >> "$GITHUB_OUTPUT"
               exit 0
             fi
 
+            echo "Deploy not ready yet"
             sleep 10
           done
 
