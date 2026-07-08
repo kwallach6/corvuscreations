@@ -31,10 +31,14 @@ jobs:
             echo "skip=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Capture workflow start time
-        id: start
+      - name: Determine commit SHA
+        id: commit
         run: |
-          echo "timestamp=$(date -u +%s)" >> "$GITHUB_OUTPUT"
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "sha=${{ github.event.pull_request.head.sha }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "sha=${{ github.sha }}" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Find Netlify deploy
         id: deploy
@@ -43,7 +47,7 @@ jobs:
           NETLIFY_TOKEN: ${{ secrets.NETLIFY_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           EVENT_NAME: ${{ github.event_name }}
-          COMMIT_SHA: ${{ github.sha }}
+          COMMIT_SHA: ${{ steps.commit.outputs.sha }}
         run: |
           echo "Looking for Netlify deploy for commit:"
           echo "$COMMIT_SHA"
