@@ -61,7 +61,7 @@ jobs:
               -H "Authorization: Bearer $NETLIFY_TOKEN" \
               "https://api.netlify.com/api/v1/sites/$NETLIFY_SITE_ID/deploys?per_page=100")
 
-            DEPLOY_JSON=$(echo "$DEPLOYS" | jq '
+            DEPLOY_JSON=$(echo "$DEPLOYS" | jq -c '
               .[]
               | select(.commit_ref=="'"$COMMIT_SHA"'")
             ' | head -n 1)
