@@ -17,7 +17,7 @@ jobs:
     env:
       PRODUCTION_URL: https://awallach-portfolio.netlify.app
 
-    steps:
+    steps:      
       - name: Check for Netlify skip
         id: skip
         run: |
@@ -88,6 +88,32 @@ jobs:
             echo "url=${{ steps.production.outputs.url }}" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Check homepage
+        if: steps.skip.outputs.skip != 'true'
+        env:
+          SITE_URL: ${{ steps.site.outputs.url }}
+        run: |
+          echo "Checking homepage"
+
+          curl \
+            --fail \
+            --silent \
+            --show-error \
+            "$SITE_URL" \
+            > homepage.html
+
+          grep -q "<html" homepage.html || {
+            echo "Homepage does not appear to be HTML"
+            exit 1
+          }
+
+          grep -q "__NUXT__" homepage.html || {
+            echo "Nuxt payload not found"
+            exit 1
+          }
+
+          echo "Homepage loaded successfully"
+
       - name: Check robots.txt
         if: steps.skip.outputs.skip != 'true'
         env:
@@ -98,12 +124,27 @@ jobs:
           curl \
             --fail \
             --silent \
+            --show-error \
             "$SITE_URL/robots.txt" \
             | tee robots.txt
 
           echo ""
-          echo "robots.txt contents:"
+          echo "robots.txt:"
           cat robots.txt
+
+          # Ensure sitemap is advertised
+          grep -qiE "^sitemap:" robots.txt || {
+            echo "robots.txt does not reference a sitemap"
+            exit 1
+          }
+
+          # Fail if the entire site is blocked
+          if grep -qiE "^disallow:\s*/\s*$" robots.txt; then
+            echo "robots.txt blocks all crawlers (Disallow: /)"
+            exit 1
+          fi
+
+          echo "robots.txt allows crawling"
 
       - name: Check sitemap.xml
         if: steps.skip.outputs.skip != 'true'
@@ -115,18 +156,62 @@ jobs:
           curl \
             --fail \
             --silent \
+            --show-error \
             "$SITE_URL/sitemap.xml" \
-            | tee sitemap.xml
+            > sitemap.xml
 
           echo ""
-          echo "sitemap.xml contents:"
+          echo "sitemap.xml:"
           cat sitemap.xml
 
-      - name: Check homepage
+          grep -q "<urlset" sitemap.xml || {
+            echo "Invalid sitemap format"
+            exit 1
+          }
+
+          echo "sitemap.xml looks good"
+      
+      - name: Check security headers
         if: steps.skip.outputs.skip != 'true'
         env:
           SITE_URL: ${{ steps.site.outputs.url }}
         run: |
+          echo "Checking security headers"
+
+          curl \
+            --silent \
+            --show-error \
+            --head \
+            "$SITE_URL" \
+            > headers.txt
+
+          cat headers.txt
+
+          grep -qi "content-security-policy" headers.txt || {
+            echo "Missing Content-Security-Policy header"
+            exit 1
+          }
+
+          grep -qi "x-content-type-options" headers.txt || {
+            echo "Missing X-Content-Type-Options header"
+            exit 1
+          }
+
+          grep -qi "x-frame-options" headers.txt || {
+            echo "Missing X-Frame-Options header"
+            exit 1
+          }
+
+          echo "Security headers present"
+
+      - name: Check avatar image delivery
+        if: steps.skip.outputs.skip != 'true'
+        env:
+          SITE_URL: ${{ steps.site.outputs.url }}
+          AVATAR_MARKER: "profile.jpg" # Change this to something unique in your avatar URL/path
+        run: |
+          echo "Checking avatar image delivery"
+
           curl \
             --fail \
             --silent \
@@ -134,77 +219,40 @@ jobs:
             "$SITE_URL" \
             > homepage.html
 
-          echo "Homepage loaded successfully"
-  og-image:
-    name: Verify OG image rendering
-    runs-on: ubuntu-latest
+          IMAGE_URL=$(grep -oE 'https?://[^"]+|/[^"]+' homepage.html \
+            | grep "$AVATAR_MARKER" \
+            | head -n 1)
 
-    env:
-      PRODUCTION_URL: https://awallach-portfolio.netlify.app
-
-    steps:
-      - name: Check for Netlify skip
-        id: skip
-        run: |
-          COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
-
-          if echo "$COMMIT_MESSAGE" | grep -qi "\[skip netlify\]"; then
-            echo "skip=true" >> "$GITHUB_OUTPUT"
-            echo "Netlify deploy skipped by commit message"
-          else
-            echo "skip=false" >> "$GITHUB_OUTPUT"
+          if [ -z "$IMAGE_URL" ]; then
+            echo "Could not find avatar image URL"
+            exit 1
           fi
 
-      - name: Report skipped OG check
-        if: steps.skip.outputs.skip == 'true'
-        run: |
-          echo "Skipping OG image check because commit contains [skip netlify]"
-
-      - name: Find Netlify deploy
-        if: steps.skip.outputs.skip != 'true'
-        id: deploy
-        env:
-          NETLIFY_TOKEN: ${{ secrets.NETLIFY_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-          COMMIT_SHA: ${{ github.sha }}
-          EVENT_NAME: ${{ github.event_name }}
-        run: |
-          if [ "$EVENT_NAME" = "pull_request" ]; then
-            CONTEXT="deploy-preview"
-          else
-            CONTEXT="production"
+          if [[ "$IMAGE_URL" == /* ]]; then
+            IMAGE_URL="${SITE_URL}${IMAGE_URL}"
           fi
 
-          MAX_ATTEMPTS=60
+          echo "Testing image:"
+          echo "$IMAGE_URL"
 
-          for attempt in $(seq 1 $MAX_ATTEMPTS); do
-            echo "Looking for $CONTEXT deploy for $COMMIT_SHA ($attempt/$MAX_ATTEMPTS)"
+          CONTENT_TYPE=$(curl \
+            --fail \
+            --head \
+            --silent \
+            --show-error \
+            "$IMAGE_URL" \
+            | awk -F': ' '/^content-type:/ {print $2}' \
+            | tr -d '\r')
 
-            DEPLOY=$(curl --silent \
-              --fail \
-              -H "Authorization: Bearer $NETLIFY_TOKEN" \
-              "https://api.netlify.com/api/v1/sites/$NETLIFY_SITE_ID/deploys?per_page=100" \
-              | jq -r "
-                .[]
-                | select(.commit_ref==\"$COMMIT_SHA\")
-                | select(.context==\"$CONTEXT\")
-                | select(.state==\"ready\")
-                | .deploy_ssl_url
-              " \
-              | head -n 1)
+          echo "Content-Type: $CONTENT_TYPE"
 
-            if [ -n "$DEPLOY" ]; then
-              echo "Found deploy: $DEPLOY"
-              echo "url=$DEPLOY" >> "$GITHUB_OUTPUT"
-              exit 0
-            fi
+          if [[ ! "$CONTENT_TYPE" =~ ^image/ ]]; then
+            echo "Expected image MIME type, got:"
+            echo "$CONTENT_TYPE"
+            exit 1
+          fi
 
-            echo "Deploy not ready yet. Waiting 10 seconds..."
-            sleep 10
-          done
-
-          echo "Timed out waiting for Netlify deploy"
-          exit 1
+          echo "Avatar image delivery works"
 
       - name: Check OG image
         if: steps.skip.outputs.skip != 'true'
