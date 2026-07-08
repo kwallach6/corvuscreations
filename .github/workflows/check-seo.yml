@@ -68,6 +68,17 @@ jobs:
 
             if [ "$EVENT_NAME" = "pull_request" ]; then
               START_TIME="${{ steps.start.outputs.timestamp }}"
+              
+              echo "$DEPLOYS" | jq -r '
+                .[]
+                | select(.context=="deploy-preview")
+                | {
+                    state,
+                    created_at,
+                    commit_ref,
+                    deploy_ssl_url
+                  }
+              '
 
               DEPLOY=$(echo "$DEPLOYS" \
                 | jq -r "
@@ -75,7 +86,7 @@ jobs:
                   | select(.state==\"ready\")
                   | select(.context==\"deploy-preview\")
                   | select(.deploy_ssl_url | contains(\"deploy-preview-$PR_NUMBER--\"))
-                  | select((.created_at | fromdateiso8601) >= $START_TIME)
+                  | select((.created_at | sub("\\.[0-9]+Z$"; "Z") | fromdateiso8601) >= $START_TIME)
                   | .deploy_ssl_url
                 " \
                 | head -n 1)
