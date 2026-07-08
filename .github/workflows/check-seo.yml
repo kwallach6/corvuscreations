@@ -66,7 +66,9 @@ jobs:
                 | jq -r "
                   .[]
                   | select(.state==\"ready\")
-                  | select(.deploy_ssl_url | contains(\"$MATCH\"))
+                  | select(.context==\"deploy-preview\")
+                  | select(.commit_ref==\"$COMMIT_SHA\")
+                  | select(.deploy_ssl_url | contains(\"deploy-preview-$PR_NUMBER--\"))
                   | .deploy_ssl_url
                 " \
                 | head -n 1)
