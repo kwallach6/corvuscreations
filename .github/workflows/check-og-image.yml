@@ -8,8 +8,6 @@ on:
 
 permissions:
   contents: read
-  issues: read
-  pull-requests: read
 
 jobs:
   og-image:
@@ -17,66 +15,53 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      # Change this to your production domain.
       PRODUCTION_URL: https://awallach-portfolio.netlify.app
 
     steps:
-      - name: Find deploy URL
+      - name: Find Netlify deploy
         id: deploy
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+        env:
+          NETLIFY_TOKEN: ${{ secrets.NETLIFY_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          COMMIT_SHA: ${{ github.sha }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            CONTEXT="deploy-preview"
+          else
+            CONTEXT="production"
+          fi
 
-            const maxAttempts = 30;
-            let url;
+          MAX_ATTEMPTS=60
 
-            if (context.eventName === "pull_request") {
-              const { owner, repo } = context.repo;
+          for attempt in $(seq 1 $MAX_ATTEMPTS); do
+            echo "Looking for $CONTEXT deploy for $COMMIT_SHA ($attempt/$MAX_ATTEMPTS)"
 
-              for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-                console.log(
-                  `Looking for Netlify Deploy Preview URL (${attempt}/${maxAttempts})`
-                );
+            DEPLOY=$(curl --silent \
+              --fail \
+              -H "Authorization: Bearer $NETLIFY_TOKEN" \
+              "https://api.netlify.com/api/v1/sites/$NETLIFY_SITE_ID/deploys?per_page=100" \
+              | jq -r "
+                .[]
+                | select(.commit_ref==\"$COMMIT_SHA\")
+                | select(.context==\"$CONTEXT\")
+                | select(.state==\"ready\")
+                | .deploy_ssl_url
+              " \
+              | head -n 1)
 
-                const comments = await github.rest.issues.listComments({
-                  owner,
-                  repo,
-                  issue_number: context.issue.number,
-                  per_page: 100,
-                });
+            if [ -n "$DEPLOY" ]; then
+              echo "Found deploy: $DEPLOY"
+              echo "url=$DEPLOY" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
 
-                // Search newest comments first.
-                for (const comment of comments.data.reverse()) {
-                  const match = comment.body.match(
-                    /https:\/\/deploy-preview-\d+--[a-z0-9-]+\.netlify\.app/
-                  );
+            echo "Deploy not ready yet. Waiting 10 seconds..."
+            sleep 10
+          done
 
-                  if (match) {
-                    url = match[0];
-                    break;
-                  }
-                }
-
-                if (url) {
-                  break;
-                }
-
-                await delay(10000);
-              }
-
-              if (!url) {
-                core.setFailed(
-                  "Timed out waiting for Netlify Deploy Preview URL"
-                );
-                return;
-              }
-            } else {
-              url = process.env.PRODUCTION_URL;
-            }
-
-            console.log(`Testing deploy: ${url}`);
-            core.setOutput("url", url);
+          echo "Timed out waiting for Netlify deploy"
+          exit 1
 
       - name: Check OG image
         env:
@@ -85,7 +70,7 @@ jobs:
           MAX_ATTEMPTS=30
 
           for attempt in $(seq 1 $MAX_ATTEMPTS); do
-            echo "Checking OG image (${attempt}/${MAX_ATTEMPTS})"
+            echo "Checking OG image ($attempt/$MAX_ATTEMPTS)"
 
             HTML=$(curl \
               --fail \
@@ -106,11 +91,9 @@ jobs:
                   OG_IMAGE="$SITE_URL$OG_IMAGE"
                 fi
 
-                # Prevent stale cached OG responses.
                 OG_IMAGE="${OG_IMAGE}?ci_check=$(date +%s)"
 
-                echo "Fetching OG image:"
-                echo "$OG_IMAGE"
+                echo "Fetching OG image..."
 
                 if curl \
                   --fail \
@@ -124,16 +107,16 @@ jobs:
                   echo "$FILE_TYPE"
 
                   if echo "$FILE_TYPE" | grep -q "PNG image"; then
-                    echo "✅ OG image rendered successfully"
+                    echo "OG image rendered successfully"
                     exit 0
                   fi
                 fi
               fi
             fi
 
-            echo "OG image not ready yet; retrying in 10 seconds..."
+            echo "OG image not ready yet. Waiting 10 seconds..."
             sleep 10
           done
 
-          echo "❌ Timed out waiting for OG image"
+          echo "Timed out waiting for OG image"
           exit 1
