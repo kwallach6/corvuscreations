@@ -77,7 +77,7 @@ jobs:
                   | select(.state==\"ready\")
                   | select(.context==\"production\")
                   | select(.commit_ref==\"$COMMIT_SHA\")
-                  | .deploy_ssl_url
+                  | .ssl_url
                 " \
                 | head -n 1)
             fi
