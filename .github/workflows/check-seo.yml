@@ -32,13 +32,14 @@ jobs:
           fi
 
       - name: Find Netlify deploy
-        if: steps.skip.outputs.skip != 'true'
         id: deploy
+        if: steps.skip.outputs.skip != 'true'
         env:
           NETLIFY_TOKEN: ${{ secrets.NETLIFY_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-          COMMIT_SHA: ${{ github.sha }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
           EVENT_NAME: ${{ github.event_name }}
+          COMMIT_SHA: ${{ github.sha }}
         run: |
           if [ "$EVENT_NAME" = "pull_request" ]; then
             echo "Looking for Deploy Preview #$PR_NUMBER"
@@ -49,7 +50,7 @@ jobs:
             echo "Looking for production deploy for $COMMIT_SHA"
 
             MATCH=""
-          fi          
+          fi
 
           for attempt in $(seq 1 60); do
             echo "Checking Netlify deploys ($attempt/60)"
