@@ -26,9 +26,9 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
 
   site: {
-    url: 'https://awallach-portfolio.netlify.app',
-    name: 'Alex Wallach\'s Portfolio',
-    description: 'A website to showcase Alex\'s projects.',
+    url: 'https://corvuscreations.vercel.app/',
+    name: 'Kam Wallach\'s Portfolio',
+    description: 'A website to showcase Kam\'s projects.',
     defaultLocale: 'en',
     trailingSlash: false
   },
@@ -171,8 +171,8 @@ export default defineNuxtConfig({
     route: '/admin',
     repository: {
       provider: 'github',
-      owner: 'awallach4',
-      repo: 'portfolio-site',
+      owner: 'kwallach6',
+      repo: 'corvuscreations',
       branch: 'master'
     }
   }

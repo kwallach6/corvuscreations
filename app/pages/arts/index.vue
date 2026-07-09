@@ -25,7 +25,7 @@ useSeoMeta({
 })
 
 defineOgImage('Portfolio', {
-  title: `${title} - Alex Wallach's Portfolio`,
+  title: `${title} - Kam Wallach's Portfolio`,
   description
 })
 </script>

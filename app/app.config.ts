@@ -23,15 +23,10 @@ export default defineAppConfig({
     credits: `Built with Nuxt UI • © ${new Date().getFullYear()}`,
     colorMode: false,
     links: [{
-      'icon': 'i-simple-icons-linkedin',
-      'to': 'https://linkedin.com/in/awallach4',
+      'icon': 'i-simple-icons-instagram',
+      'to': 'https://www.instagram.com/corvus_creations06/',
       'target': '_blank',
-      'aria-label': 'Alex on LinkedIn'
-    }, {
-      'icon': 'i-simple-icons-github',
-      'to': 'https://github.com/awallach4',
-      'target': '_blank',
-      'aria-label': 'Alex on GitHub'
+      'aria-label': 'Instagram'
     }]
   }
 })

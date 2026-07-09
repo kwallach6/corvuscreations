@@ -18,7 +18,7 @@ useHead({
 })
 
 useSeoMeta({
-  titleTemplate: '%s - Alex Wallach\'s Portfolio',
+  titleTemplate: '%s - Kam Wallach\'s Portfolio',
   twitterCard: 'summary_large_image'
 })
 </script>
