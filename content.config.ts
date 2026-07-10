@@ -39,7 +39,7 @@ export default defineContentConfig({
     projlist: defineCollection({
       type: 'page',
       source: [
-        { include: 'arts.yml' }
+        { include: 'work.yml' }
       ],
       schema: z.object({
         title: z.string(),
@@ -58,7 +58,7 @@ export default defineContentConfig({
     }),
     artmeta: defineCollection({
       type: 'data',
-      source: 'arts/*.yml',
+      source: 'work/*.yml',
       schema: z.object({
         title: z.string().nonempty(),
         description: z.string().nonempty(),
@@ -70,7 +70,7 @@ export default defineContentConfig({
     }),
     artpage: defineCollection({
       type: 'page',
-      source: 'arts/*.md',
+      source: 'work/*.md',
       schema: z.object({
         title: z.string(),
         description: z.string(),
