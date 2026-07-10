@@ -100,7 +100,7 @@ export default defineNuxtConfig({
         'base-uri': ['\'none\''],
         'font-src': ['\'self\'', 'https:', 'data:'],
         'form-action': ['\'self\''],
-        'frame-src': ['\'self\'', 'https: www.youtube.com'],
+        'frame-src': ['\'self\'', 'https: www.youtube.com', 'https: drive.google.com'],
         'frame-ancestors': ['\'self\''],
         'img-src': ['\'self\'', 'data:', 'https: avatars.githubusercontent.com'],
         'object-src': ['\'none\''],
