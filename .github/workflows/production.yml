@@ -1,0 +1,67 @@
+name: Test Production
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  test-production:
+    runs-on: ubuntu-latest
+
+    env:
+      SITE_URL: https://corvuscreations.vercel.app
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Check homepage
+        run: |
+          curl --fail --silent --show-error "$SITE_URL" > homepage.html
+
+          grep -q "<html" homepage.html
+          grep -q "__NUXT__" homepage.html
+
+      - name: Check robots.txt
+        run: |
+          curl --fail --silent "$SITE_URL/robots.txt" > robots.txt
+
+          grep -qiE "^sitemap:" robots.txt
+
+          if grep -qiE "^disallow:\s*/\s*$" robots.txt; then
+            echo "robots.txt blocks crawling"
+            exit 1
+          fi
+
+      - name: Check sitemap.xml
+        run: |
+          curl --fail --silent \
+            "$SITE_URL/sitemap.xml" \
+            > sitemap.xml
+
+          grep -q "<urlset" sitemap.xml
+
+      - name: Check security headers
+        run: |
+          curl --head --silent "$SITE_URL" > headers.txt
+
+          grep -qi "content-security-policy" headers.txt
+          grep -qi "x-content-type-options" headers.txt
+          grep -qi "x-frame-options" headers.txt
+
+      - name: Check OG image
+        run: |
+          HTML=$(curl -fsSL "$SITE_URL")
+
+          OG=$(echo "$HTML" |
+            grep -oP '<meta property="og:image" content="\K[^"]+' |
+            head -n1)
+
+          [[ "$OG" == /* ]] && OG="$SITE_URL$OG"
+
+          curl -fsSL "$OG" -o og.png
+
+          file og.png | grep -q "PNG image"
