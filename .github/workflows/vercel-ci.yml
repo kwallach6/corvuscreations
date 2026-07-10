@@ -1,0 +1,186 @@
+name: Test deployed site
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  check-site:
+    name: Verify deployed site
+    runs-on: ubuntu-latest
+
+    env:
+      PRODUCTION_URL: https://corvuscreations.vercel.app
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Determine commit SHA
+        id: commit
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "sha=${{ github.event.pull_request.head.sha }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "sha=${{ github.sha }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Wait for Vercel deployment
+        id: deploy
+        if: github.event_name == 'pull_request'
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          COMMIT_SHA: ${{ steps.commit.outputs.sha }}
+        run: |
+          for attempt in $(seq 1 60); do
+            echo "Checking deployment ($attempt/60)"
+
+            DEPLOYMENT=$(
+              curl -s \
+                -H "Authorization: Bearer $VERCEL_TOKEN" \
+                "https://api.vercel.com/v6/deployments?projectId=$VERCEL_PROJECT_ID&limit=20" \
+              | jq -c '.deployments[]
+                | select(.meta.githubCommitSha=="'"$COMMIT_SHA"'")
+                | select(.readyState=="READY")' \
+              | head -n1
+            )
+
+            if [ -n "$DEPLOYMENT" ]; then
+              URL=$(echo "$DEPLOYMENT" | jq -r '.url')
+              echo "url=https://$URL" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+
+            sleep 10
+          done
+
+          echo "Timed out waiting for deployment"
+          exit 1
+
+      - name: Set production URL
+        if: github.event_name == 'push'
+        id: production
+        run: |
+          echo "url=${{ env.PRODUCTION_URL }}" >> "$GITHUB_OUTPUT"
+
+      - name: Resolve site URL
+        id: site
+        run: |
+          if [ "${{ steps.deploy.outputs.url }}" != "" ]; then
+            echo "url=${{ steps.deploy.outputs.url }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "url=${{ steps.production.outputs.url }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check homepage
+        env:
+          SITE_URL: ${{ steps.site.outputs.url }}
+        run: |
+          curl \
+            --fail \
+            --silent \
+            --show-error \
+            "$SITE_URL" \
+            > homepage.html
+
+          grep -q "<html" homepage.html
+          grep -q "__NUXT__" homepage.html
+
+      - name: Check robots.txt
+        env:
+          SITE_URL: ${{ steps.site.outputs.url }}
+        run: |
+          curl \
+            --fail \
+            --silent \
+            "$SITE_URL/robots.txt" \
+            > robots.txt
+
+          grep -qiE "^sitemap:" robots.txt
+
+          if grep -qiE "^disallow:\s*/\s*$" robots.txt; then
+            echo "robots.txt blocks crawling"
+            exit 1
+          fi
+
+      - name: Check sitemap.xml
+        env:
+          SITE_URL: ${{ steps.site.outputs.url }}
+        run: |
+          curl \
+            --fail \
+            --silent \
+            "$SITE_URL/sitemap.xml" \
+            > sitemap.xml
+
+          grep -q "<urlset" sitemap.xml
+
+      - name: Check security headers
+        env:
+          SITE_URL: ${{ steps.site.outputs.url }}
+        run: |
+          curl \
+            --head \
+            --silent \
+            "$SITE_URL" \
+            > headers.txt
+
+          grep -qi "content-security-policy" headers.txt
+          grep -qi "x-content-type-options" headers.txt
+          grep -qi "x-frame-options" headers.txt
+
+      - name: Check avatar image delivery
+        env:
+          SITE_URL: ${{ steps.site.outputs.url }}
+          AVATAR_MARKER: profile.jpg
+        run: |
+          curl -fsSL "$SITE_URL" > homepage.html
+
+          IMAGE_URL=$(grep -oE 'srcset="[^"]+|src="[^"]+' homepage.html \
+            | grep "$AVATAR_MARKER" \
+            | head -n1 \
+            | sed -E 's/^(srcset|src)="//' \
+            | cut -d',' -f1 \
+            | awk '{print $1}')
+
+          [ -n "$IMAGE_URL" ]
+
+          [[ "$IMAGE_URL" == /* ]] && IMAGE_URL="$SITE_URL$IMAGE_URL"
+
+          CONTENT_TYPE=$(curl -sI "$IMAGE_URL" \
+            | awk -F': ' '/^content-type:/ {print $2}' \
+            | tr -d '\r')
+
+          [[ "$CONTENT_TYPE" =~ ^image/ ]]
+
+      - name: Check OG image
+        env:
+          SITE_URL: ${{ steps.site.outputs.url }}
+        run: |
+          for i in $(seq 1 30); do
+            HTML=$(curl -fsSL "$SITE_URL" || true)
+
+            OG=$(echo "$HTML" \
+              | grep -oP '<meta property="og:image" content="\K[^"]+' \
+              | head -n1)
+
+            if [ -n "$OG" ]; then
+              [[ "$OG" == /* ]] && OG="$SITE_URL$OG"
+
+              if curl -fsSL "$OG" -o og.png; then
+                if file og.png | grep -q "PNG image"; then
+                  exit 0
+                fi
+              fi
+            fi
+
+            sleep 10
+          done
+
+          exit 1
