@@ -1,11 +1,25 @@
 title: Kam Wallach
 about:
   title: About Me
-  description: I am a recent Mechanical Engineering graduate from RPI with a passion for the performing arts.  I enjoy solving problems, building things, working as a lighting designer or master electrician for the theatre, and singing.  As an engineering student and an artist, I am excited to explore the intersection between the arts and engineering and I love to apply my knowledge across disciplines.  I am currently searching for entry level mechanical or manufacturing engineering jobs for a start date in Summer or Fall 2026.
+  description: I am a rising sophomore at Tufts University studying Community Health and Studio Art in the 5-year Combined Degree Program with the School of the Museum of Fine Arts at Tufts. I have a love for both the visual and performing arts that informs my way of thinking and how I approach my academics. Throughout my time in college, I am looking to gain experience in different art mediums and explore art and design as they relate to advocacy and the public interest sector, especially in relation to healthcare and health access.
 description: BA/BFA Student at Tufts University, Visual Artist & Graphic Designer
 experience:
   title: Relevant Experience
   items:
+    - position: Media Archivist for
+      date: May 2026-Present
+      company:
+        name: Tufts 3Ps
+        logo: i-game-icons:drama-masks
+        url: https://www.penpaintandpretzels.com/
+        color: "#FF6363"
+    - position: Volunteer at
+      company:
+        name: 7th Circle DIY
+        url: https://www.7thcirclemusiccollective.org/
+        logo: i-material-symbols:music-note
+        color: "#d6001c"
+      date: Jan 2026 - Present
     - position: Technician at
       date: Nov 2025 - May 2026
       company:
@@ -13,34 +27,13 @@ experience:
         logo: i-lucide-lightbulb
         url: https://tdps.tufts.edu
         color: "#22deff"
-    - position: Tutor at
+    - position: ""
+      date: 2021-Present
       company:
-        name: RPI Success Center
-        url: https://successcenter.rpi.edu
-        logo: i-lucide-graduation-cap
-        color: "#d6001c"
-      date: 2025 - 2026
-    - position: Intern at
-      date: 2025
-      company:
-        name: Design Lab @ RPI
-        logo: i-lucide-cog
-        url: https://designlab.rpi.edu
-        color: "#FF6363"
-    - position: Student Worker at
-      date: 2022 - 2025
-      company:
-        name: EMPAC @ RPI
+        name: Freelance Artist/Designer
         logo: i-lucide-palette
-        url: https://empac.rpi.edu
+        url: ""
         color: "#5E6AD2"
-    - position: Engineering Intern at
-      company:
-        name: New Standard
-        url: https://newstandard.com
-        logo: i-lucide-cog
-        color: "#2a31faff"
-      date: 2024
   description: ""
 hero:
   images:

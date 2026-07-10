@@ -14,19 +14,17 @@ Hello, my name is Kam Wallach but you may know my work under the name Corvus Cre
 
 ## Outside the Studio
 
-Engineering is built on creativity, so it's no surprise to say that I'm also an artist! I've spent the last 7 years as a lighting technician for various theatres, from my high school's theatre club to my part-time job at RPI's [Experimental Media and Performing Arts Center (EMPAC)](https://empac.rpi.edu), where I helped with everything from focusing lights to learning how to fly a grand piano! I also sung in the RPI Concert Choir, where I was featured in a few solos! My niche, however, is blending the arts, technology, and engineering, which is something quite special about RPI. I had the privilege this spring to participate in a focus group led by Dr. Robert Whalen, director of the RPI Concert Choir, to formulate a plan for a research project that seeks to understand how AI and machine learning can help students learn music without developing bad habits. While the technical side of this project is outside of my expertise, it has been quite fulfilling to contribute what I can to the discussion, and I'm excited to see where this project goes once it gets started!
+Because art is such an interdisciplinary process, it shouldn't be a surprise that my work goes beyond the visual medium. I have been doing theater and dance since age 3 and have experience with plays, musicals, ballet, tap, jazz, hip hop, and modern, but also started to dabble in tech in 6th grade when I did props for my middle school's production of *Mary Poppins*. Since then, I have stage managed two high school shows, held assistant and co-scenic designer positions in Tufts' student theater group, 3Ps, and now work part time with the Lighting Designer and Assistant Technical Director of the Tufts Department of Theater, Dance, and Performance Studies. Additionally, in high school I joined my school's marching band for two seasons and learned how to play alto saxophone, and did winterguard for two seasons; one was with my high school and the other was with Malachi Independent A, where I had the opportunity to compete at the statewide and international levels. I attended the 2024 Winterguard International (WGI) World Championships in Dayton, Ohio, where my team made semifinals and finished 34th in the world in the Independent A Class. Even though I am not currently doing competitive winterguard, I continue to perform where I can and have started to experiment with writing my own choreography. My love for music and performance also motivated me to sing in my high school's chamber choir for three years, where I became a section leader and performed in my district's honor choir. I enjoy exploring the connection between the visual and performing arts, and try to incorporate this into my work as much as I can, whether it's by creating pieces based on song lyrics or even using my own dance action shots and choreography as visual components.
 
-## Doing It Right
+## My Values
 
-Anyone who's worked with me on a project can speak to just how insistent I am about doing things "right", especially when it comes to CAD and drawing reviews. I believe in spending the extra time upfront to do something in an organized, thoughtful way, rather than combing back through messy work to clean it up. Countless projects I've worked on have dragged on past initial deadlines because they became too messy to understand, and that's something I've sought to avoid with each new project I take on. Whether that's fully constraining a CAD model, organizing a repository, or grouping commands in a robot program, I'm one to emphasize that it's better to do it the first time than trying to fix it later!
+As someone who often experiments and tries new things, I am no stranger to challenges and initial failures. Because of this, it is highly important to me to keep pushing and figure out why something didn't work the first time instead of immediately giving up. I know I cannot expect to be perfect at something on the first try, and that it is more important to ask for help, apply that feedback, and work towards consistency in my successes. 
 
 ## Honors and Awards
 
-- The Palmer C. Ricketts Prize in Mechanical Engineering
-- [Tau Beta Pi](https://www.tbp.org), the Engineering Honor Society
-- [Alpha Psi Omega](https://www.alphapsiomega.org), the National Theatre Honor Society
-- 4.0 Award for 90 Credits
+- IB Diploma
+- Seal of Biliteracy
 
 ## In My Free Time
 
-When I finally catch a break from all my projects, I spend my time cooking, playing the piano, and playing video games.
+In the rare moments that I am not doing schoolwork, working on an art project, or performing, I like to read, listen to music, go on hikes, and spend time with my friends.
