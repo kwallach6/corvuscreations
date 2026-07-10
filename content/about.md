@@ -1,6 +1,6 @@
 ---
-title: About Me
-description: Learn about everything I've done in college and the awards I received!
+title: About
+description: Learn about my work and experience as an art student!
 sitemap:
   loc: /about
   lastmod: 2026-06-27
@@ -8,11 +8,11 @@ sitemap:
   images: []
 ---
 
-:about-header{description="Where do engineering and the arts intersect? Read about my college journey and all of the projects and teams I've been a part of." title="About Me"}
+:about-header{title="About Me"}
 
-Hi, I'm **Alex Wallach**, a B.S. Mechanical Engineering graduate from [Rensselaer Polytechnic Institute (RPI)](https://rpi.edu) looking to start my career in manufacturing or mechanical design. Since my childhood, I have enjoyed hands-on work where I can interact with a system or device and understand how it works. This year, I had the opportunity to take the **Manufacturing Processes and Systems Lab (MPS)** course, where I designed an automation system to assemble 300 products that my team spent the year designing components, tooling, and fixtures for. I also had the opportunity to participate in the capstone design course, where my team completed a fixture redesign for a client's product. This is only a small sampling of the numerous [engineering projects](/engineering) I've worked on, but each of them pushes me to find better solutions and think creatively.
+Hello, my name is Kam Wallach but you may know my work under the name Corvus Creations. I am an artist and graphic designer, as well as a student at Tufts University. I am a sophomore studying Community Health and Studio Art in the Combined Degree program, and I specialize in printwork, illustration, and graphic design, but am looking to expand my practice. Reach out if you have any questions or if you would like to collaborate!
 
-## Outside the Shop
+## Outside the Studio
 
 Engineering is built on creativity, so it's no surprise to say that I'm also an artist! I've spent the last 7 years as a lighting technician for various theatres, from my high school's theatre club to my part-time job at RPI's [Experimental Media and Performing Arts Center (EMPAC)](https://empac.rpi.edu), where I helped with everything from focusing lights to learning how to fly a grand piano! I also sung in the RPI Concert Choir, where I was featured in a few solos! My niche, however, is blending the arts, technology, and engineering, which is something quite special about RPI. I had the privilege this spring to participate in a focus group led by Dr. Robert Whalen, director of the RPI Concert Choir, to formulate a plan for a research project that seeks to understand how AI and machine learning can help students learn music without developing bad habits. While the technical side of this project is outside of my expertise, it has been quite fulfilling to contribute what I can to the discussion, and I'm excited to see where this project goes once it gets started!
 

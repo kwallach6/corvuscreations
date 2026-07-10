@@ -1,17 +1,17 @@
-title: Alex Wallach
+title: Kam Wallach
 about:
   title: About Me
   description: I am a recent Mechanical Engineering graduate from RPI with a passion for the performing arts.  I enjoy solving problems, building things, working as a lighting designer or master electrician for the theatre, and singing.  As an engineering student and an artist, I am excited to explore the intersection between the arts and engineering and I love to apply my knowledge across disciplines.  I am currently searching for entry level mechanical or manufacturing engineering jobs for a start date in Summer or Fall 2026.
-description: B.S. Mechanical Engineering graduate from Rensselaer Polytechnic Institute (RPI)
+description: BA/BFA Student at Tufts University, Visual Artist & Graphic Designer
 experience:
-  title: Work Experience
+  title: Relevant Experience
   items:
-    - position: Event Technician at
-      date: 2025 - 2026
+    - position: Technician at
+      date: Nov 2025 - May 2026
       company:
-        name: Showtechs
+        name: Tufts TDPS
         logo: i-lucide-lightbulb
-        url: https://showtechs.org
+        url: https://tdps.tufts.edu
         color: "#22deff"
     - position: Tutor at
       company:
@@ -44,8 +44,8 @@ experience:
   description: ""
 hero:
   images:
-    - src: /rai/rai.jpg
-      alt: The Robotic Art Installation project
+    - src: /homepage-images/postcardfile2.png
+      alt: Postcard for Graphic Arts Toolbox (Fall 2025)
     - src: /playhouse/Balcony.png
       alt: RPI Playhose rendering
     - src: /mps/mps-team.jpg
@@ -73,9 +73,9 @@ navigation:
   description: ""
 seo:
   title: Home
-  description: Alex's portfolio site to showcase projects.
+  description: Kam's portfolio site to showcase projects.
 sitemap:
   loc: /
   videos: []
   images: []
-  lastmod: 2026-06-27
+  lastmod: 2026-07-09
